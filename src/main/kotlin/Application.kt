@@ -1,6 +1,10 @@
 package com.api
 
 import com.api.database.configureDatabases
+import com.api.plugins.configureHTTP
+import com.api.plugins.configureSecurity
+import com.api.plugins.configureSerialization
+import com.api.routing.configureRouting
 import io.ktor.server.application.*
 
 fun main(args: Array<String>) {

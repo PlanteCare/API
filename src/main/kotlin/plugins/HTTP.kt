@@ -1,4 +1,4 @@
-package com.api
+package com.api.plugins
 
 import io.ktor.http.*
 import io.ktor.server.application.*
