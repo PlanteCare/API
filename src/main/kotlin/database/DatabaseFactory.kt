@@ -19,7 +19,7 @@ suspend fun <T> dbQuery(block: suspend () -> T): T =
     newSuspendedTransaction(Dispatchers.IO) { block() }
 
 fun Application.configureDatabases() {
-    val logger = LoggerFactory.getLogger("Database")
+    val logger = LoggerFactory.getLogger(this::class.java)
 
     try {
         logger.info("Initialisation de la connexion à la base de données...")

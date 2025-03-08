@@ -10,22 +10,14 @@ import org.slf4j.LoggerFactory
 fun Application.configureRouting(
     userService: UserService
 ) {
-    val logger = LoggerFactory.getLogger("UserRoutes")
+    val logger = LoggerFactory.getLogger(this::class.java)
     routing {
         get("/") {
             call.respondText { "Plante Care API" }
         }
 
-        get("/users") {
-            try {
-                val users = userService.getAllUsers()
-                call.respond(users)
-            } catch (e: Exception) {
-                logger.error("Error fetching users", e)
-                call.respond(
-                    HttpStatusCode.InternalServerError
-                )
-            }
+        route("/api/user") {
+            userRoute(userService)
         }
     }
 }

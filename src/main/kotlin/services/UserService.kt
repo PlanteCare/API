@@ -13,4 +13,19 @@ class UserService (
         logger.info("Getting all users")
         return userRepository.getAllUser()
     }
+
+    suspend fun getUserByEmail(email: String): UserDTO? {
+        logger.info("Retrieving user with email")
+        return userRepository.findByEmail(email = email)
+    }
+
+    suspend fun getUserById(id: Int): UserDTO? {
+        logger.info("Retrieving user with id")
+        return userRepository.findById(id = id)
+    }
+
+    suspend fun getUserByUsername(username: String): UserDTO? {
+        logger.info("Retrieving user with username")
+        return userRepository.findByUsername(username = username)
+    }
 }
