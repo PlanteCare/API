@@ -1,6 +1,6 @@
 package com.api.database
 
-import com.api.database.tables.Users
+import com.api.models.DAOs.User
 import io.ktor.server.application.*
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.*
@@ -34,7 +34,7 @@ fun Application.configureDatabases() {
         transaction(database) {
             logger.info("Début de la création/vérification des tables...")
             addLogger(StdOutSqlLogger)
-            SchemaUtils.create(Users)
+            SchemaUtils.create(User)
             logger.info("Tables créées/vérifiées avec succès")
         }
     } catch (e: Exception) {

@@ -20,6 +20,7 @@ repositories {
 }
 
 dependencies {
+    implementation(libs.exposed.java.time)
     implementation(libs.mysql.connector)
     implementation(libs.ktor.server.core)
     implementation(libs.ktor.serialization.kotlinx.json)

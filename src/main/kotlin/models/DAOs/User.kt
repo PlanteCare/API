@@ -1,13 +1,18 @@
-package com.api.database.tables
+package com.api.models.DAOs
 
 import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.javatime.datetime
+import java.time.LocalDateTime
 
-object Users : Table() {
+object User : Table() {
+
     val id = integer("id").autoIncrement()
     val username = varchar("username", 50).uniqueIndex()
     val email = varchar("email", 255).uniqueIndex()
     val password = varchar("password", 125)
     val status = bool("status").default(true)
+    val createdAt = datetime("created_at").default(LocalDateTime.now())
+    val updatedAt = datetime("updated_at").default(LocalDateTime.now())
 
     override val primaryKey = PrimaryKey(id)
 }
