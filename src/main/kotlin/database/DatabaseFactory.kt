@@ -8,12 +8,12 @@ import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransacti
 import org.slf4j.LoggerFactory
 import org.jetbrains.exposed.sql.transactions.transaction
 
-// Variable globale pour stocker l'instance de la base de données
+// Global variable to store the database instance
 lateinit var database: Database
 
 /**
- * Fonction utilitaire pour exécuter des requêtes à la base de données de manière asynchrone
- * Cette fonction peut être utilisée par tous les repositories
+ * Utility function to execute database queries asynchronously
+ * This function can be used by all repositories
  */
 suspend fun <T> dbQuery(block: suspend () -> T): T =
     newSuspendedTransaction(Dispatchers.IO) { block() }
@@ -22,23 +22,23 @@ fun Application.configureDatabases() {
     val logger = LoggerFactory.getLogger(this::class.java)
 
     try {
-        logger.info("Initialisation de la connexion à la base de données...")
+        logger.info("Initializing database connection...")
         database = Database.connect(
             url = environment.config.property("database.url").getString(),
             user = environment.config.property("database.user").getString(),
             driver = environment.config.property("database.driver").getString(),
             password = environment.config.property("database.password").getString(),
         )
-        logger.info("Connexion à la base de données établie avec succès")
+        logger.info("Database connection established successfully")
 
         transaction(database) {
-            logger.info("Début de la création/vérification des tables...")
+            logger.info("Starting table creation/verification...")
             addLogger(StdOutSqlLogger)
             SchemaUtils.create(User)
-            logger.info("Tables créées/vérifiées avec succès")
+            logger.info("Tables created/verified successfully")
         }
     } catch (e: Exception) {
-        logger.error("Erreur lors de l'initialisation de la base de données: ${e.message}")
+        logger.error("Error initializing database: ${e.message}")
         e.printStackTrace()
     }
 }

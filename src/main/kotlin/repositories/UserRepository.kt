@@ -3,9 +3,9 @@ package com.api.repositories
 import com.api.database.dbQuery
 import com.api.models.DAOs.User
 import com.api.models.DTOs.UserDTO
-import com.api.models.DTOs.UserRegisterDTO
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 
@@ -51,21 +51,13 @@ class UserRepository {
         }
     }
 
-    suspend fun registerUser(hashPassword: String, us)
-
-    suspend fun updateUser(id: Int, user: UserDTO) {
+    suspend fun registerUser(username: String, email: String, password: String) {
         return dbQuery {
-            User.update({ User.id eq id }) {
-                it[username] = user.username
-                it[email] = user.email
-                it[status] = user.status
-            } > 0
-        }
-    }
-
-    suspend fun deleteUser(id: Int) {
-        return dbQuery {
-            User.deleteWhere { User.id eq id } > 0
+            val insertStatement = User.insert {
+                it[User.username] = username
+                it[User.email] = email
+                it[User.password] = password
+            }
         }
     }
 }

@@ -6,8 +6,10 @@ kotlin-version = "2.1.10"
 ktor-version = "3.1.1"
 logback-version = "1.4.14"
 mysql = "8.0.33"
+jbcrypt-version = "0.4"
 
 [libraries]
+jbcrypt = { module = "org.mindrot:jbcrypt", version.ref = "jbcrypt-version" }
 exposed-java-time = { module = "org.jetbrains.exposed:exposed-java-time", version.ref = "exposed-version" }
 mysql-connector = { module = "mysql:mysql-connector-java", version.ref = "mysql" }
 ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor-version" }
