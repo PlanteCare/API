@@ -1,9 +1,17 @@
 ktor:
-    application:
+  application:
         modules:
-            - com.example.ApplicationKt.module
-    deployment:
+            - com.api.ApplicationKt.module
+  deployment:
         port: 8080
+  development: true
+
+database:
+  url: "jdbc:mysql://localhost:3306/plantecare"
+  user: "root"
+  password: "root"
+  driver: "com.mysql.cj.jdbc.Driver"
+
 jwt:
   domain: "https://jwt-provider-domain/"
   audience: "jwt-audience"

@@ -1,5 +1,6 @@
-package com.example
+package com.api
 
+import com.api.database.configureDatabases
 import io.ktor.server.application.*
 
 fun main(args: Array<String>) {
