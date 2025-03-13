@@ -35,7 +35,6 @@ class UserService (
     suspend fun registerUser(request: RegisterRequest): RegisterResponse {
         logger.info("Registering new user with username: ${request.username}")
 
-        // Check if user with email already exists
         val existingUserEmail = userRepository.findByEmail(request.email)
         if (existingUserEmail != null) {
             logger.warn("Registration failed: Email ${request.email} already exists")
@@ -44,7 +43,6 @@ class UserService (
             )
         }
 
-        // Check if user with username already exists
         val existingUserUsername = userRepository.findByUsername(request.username)
         if (existingUserUsername != null) {
             logger.warn("Registration failed: Username ${request.username} already exists")
@@ -53,19 +51,16 @@ class UserService (
             )
         }
 
-        // Hash the password
         val salt = BCrypt.gensalt()
         val hashedPassword = BCrypt.hashpw(request.password, salt)
 
         try {
-            // Register the user
             userRepository.registerUser(request.username, request.email, hashedPassword)
 
-            // Get the newly created user to return in the response
             val newUser = userRepository.findByUsername(request.username)
 
             return if (newUser != null) {
-                logger.info("User registered successfully: ${newUser.username}")
+                logger.info("User registered successfully")
                 RegisterResponse(
                     message = "User registered successfully",
                     user = newUser

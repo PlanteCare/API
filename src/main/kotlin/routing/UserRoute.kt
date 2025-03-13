@@ -124,7 +124,6 @@ fun Route.userRoute(
                 return@post
             }
 
-            // Validate email format
             if (!isValidEmail(registerRequest.email)) {
                 call.respond(
                     HttpStatusCode.BadRequest,
@@ -133,7 +132,6 @@ fun Route.userRoute(
                 return@post
             }
 
-            // Password strength validation
             if (registerRequest.password.length < 8) {
                 call.respond(
                     HttpStatusCode.BadRequest,

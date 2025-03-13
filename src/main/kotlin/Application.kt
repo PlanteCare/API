@@ -6,6 +6,7 @@ import com.api.plugins.configureSecurity
 import com.api.plugins.configureSerialization
 import com.api.repositories.UserRepository
 import com.api.routing.configureRouting
+import com.api.services.JwtService
 import com.api.services.UserService
 import io.ktor.server.application.*
 
@@ -16,9 +17,10 @@ fun main(args: Array<String>) {
 fun Application.module() {
     val userRepository = UserRepository()
     val userService = UserService(userRepository)
+    val jwtService = JwtService(this, userService)
     configureSerialization()
     configureDatabases()
     configureHTTP()
-    configureSecurity()
+    configureSecurity(jwtService)
     configureRouting(userService)
 }
