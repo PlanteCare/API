@@ -22,5 +22,5 @@ fun Application.module() {
     configureDatabases()
     configureHTTP()
     configureSecurity(jwtService)
-    configureRouting(userService)
+    configureRouting(userService, jwtService)
 }

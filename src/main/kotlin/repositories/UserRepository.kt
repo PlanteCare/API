@@ -16,6 +16,7 @@ class UserRepository {
         username = row[User.username],
         email = row[User.email],
         status = row[User.status],
+        password = row[User.password],
         createdAt = row[User.createdAt].format(DateTimeFormatter.ISO_DATE_TIME),
         updatedAt = row[User.updatedAt].format(DateTimeFormatter.ISO_DATE_TIME)
     )

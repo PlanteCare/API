@@ -12,10 +12,3 @@ data class UserDTO(
     val createdAt: String,
     val updatedAt: String
 )
-
-
-
-
-
-
-

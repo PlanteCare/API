@@ -1,35 +1,32 @@
 package com.api.services
 
-import com.api.repositories.UserRepository
 import com.api.routing.requests.LoginRequest
 import com.api.utils.verifyPassword
 import com.auth0.jwt.JWT
-import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
-import io.ktor.http.*
-import io.ktor.server.auth.*
+import com.auth0.jwt.interfaces.JWTVerifier
 import io.ktor.server.auth.jwt.*
+import kotlinx.coroutines.runBlocking
 import java.util.*
 
-class JwtService (
-    private val application: Application,
+class JwtService(
+    private val application: io.ktor.server.application.Application,
     private val userService: UserService
 ) {
 
-    private val secret = getConfigProprety("jwt.secret")
-    private val issuer = getConfigProprety("jwt.issuer")
-    private val audience = getConfigProprety("jwt.audience")
-    val realm = getConfigProprety("jwt.realm")
+    private val secret = getConfigProperty("jwt.secret")
+    private val issuer = getConfigProperty("jwt.issuer")
+    private val audience = getConfigProperty("jwt.audience")
+    val realm = getConfigProperty("jwt.realm")
 
-    val jwtVerifier = JWTVerifier =
-        JWT
-            .require(Algorithm.HMAC256(secret))
-            .withAudience(audience)
-            .withIssuer(issuer)
-            .build()
+    val jwtVerifier: JWTVerifier = JWT
+        .require(Algorithm.HMAC256(secret))
+        .withAudience(audience)
+        .withIssuer(issuer)
+        .build()
 
     fun createJwtToken(loginRequest: LoginRequest): String? {
-        val existingUser = userService.getUserByEmail(loginRequest.email)
+        val existingUser = runBlocking { userService.getUserByEmail(loginRequest.email) }
 
         return if (existingUser != null && verifyPassword(loginRequest.password, existingUser.password)) {
             JWT
@@ -44,22 +41,23 @@ class JwtService (
 
     fun customValidator(credential: JWTCredential): JWTPrincipal? {
         val email = extractEmail(credential)
-        val user = email?.let(userService::findByEmail)
+        val user = email?.let { runBlocking { userService.getUserByEmail(it) } }
 
         return user?.let {
-            if(audienceMatvhes(credential)) {
+            if (audienceMatches(credential)) {
                 JWTPrincipal(credential.payload)
             } else null
         }
     }
 
-    private fun audienceMatvhes(credential: JWTCredential): Boolean =
+    // Correction du nom de fonction (faute de frappe)
+    private fun audienceMatches(credential: JWTCredential): Boolean =
         credential.payload.audience.contains(audience)
 
-    private fun extractEmail(credential: JWTCredential) =
+    private fun extractEmail(credential: JWTCredential): String? =
         credential.payload.getClaim("email").asString()
 
-
-    private fun getConfigProprety(path: String) =
+    // Correction du nom de fonction (faute de frappe)
+    private fun getConfigProperty(path: String): String =
         application.environment.config.property(path).getString()
 }
