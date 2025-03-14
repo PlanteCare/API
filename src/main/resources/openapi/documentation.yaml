@@ -1,14 +1,14 @@
 openapi: "3.0.3"
 info:
-  title: "Application API"
-  description: "Application API"
+  title: "PlanteCare API"
+  description: "API pour l'application mobile PlanteCare, gérant l'authentification et les utilisateurs"
   version: "1.0.0"
 servers:
   - url: "http://0.0.0.0:8080"
 paths:
   /:
     get:
-      description: "Hello World!"
+      description: "Accueil de l'API"
       responses:
         "200":
           description: "OK"
@@ -18,6 +18,342 @@ paths:
                 type: "string"
               examples:
                 Example#1:
-                  value: "Hello World!"
+                  value: "Plante Care API"
+  
+  /api/auth:
+    post:
+      tags:
+        - "Authentification"
+      summary: "Connexion utilisateur"
+      description: "Authentifie un utilisateur et retourne un token JWT"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: "Connexion réussie"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        "400":
+          description: "Requête invalide"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: "Authentification échouée"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: "Erreur serveur"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  
+  /api/user:
+    get:
+      tags:
+        - "Utilisateurs"
+      summary: "Liste tous les utilisateurs"
+      description: "Récupère la liste de tous les utilisateurs"
+      responses:
+        "200":
+          description: "Liste des utilisateurs"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserDTO"
+        "500":
+          description: "Erreur serveur"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  
+  /api/user/{id}:
+    get:
+      tags:
+        - "Utilisateurs"
+      summary: "Récupère un utilisateur par ID"
+      description: "Récupère les détails d'un utilisateur spécifique par son ID"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          description: "ID de l'utilisateur"
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Détails de l'utilisateur"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDTO"
+        "404":
+          description: "Utilisateur non trouvé"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "400":
+          description: "ID invalide"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: "Erreur serveur"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  
+  /api/user/searchByEmail:
+    post:
+      tags:
+        - "Utilisateurs"
+      summary: "Recherche un utilisateur par email"
+      description: "Recherche un utilisateur spécifique par son adresse email"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SearchByEmail"
+      responses:
+        "200":
+          description: "Utilisateur trouvé"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDTO"
+        "404":
+          description: "Utilisateur non trouvé"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "400":
+          description: "Format de requête invalide"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: "Erreur serveur"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  
+  /api/user/searchByUsername:
+    post:
+      tags:
+        - "Utilisateurs"
+      summary: "Recherche un utilisateur par nom d'utilisateur"
+      description: "Recherche un utilisateur spécifique par son nom d'utilisateur"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SearchByUsername"
+      responses:
+        "200":
+          description: "Utilisateur trouvé"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDTO"
+        "404":
+          description: "Utilisateur non trouvé"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "400":
+          description: "Format de requête invalide"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: "Erreur serveur"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  
+  /api/user/register:
+    post:
+      tags:
+        - "Utilisateurs"
+      summary: "Inscription d'un nouvel utilisateur"
+      description: "Enregistre un nouvel utilisateur dans le système"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterRequest"
+      responses:
+        "201":
+          description: "Utilisateur créé avec succès"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegisterResponse"
+        "400":
+          description: "Données invalides"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: "Conflit (utilisateur existe déjà)"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegisterResponse"
+        "500":
+          description: "Erreur serveur"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 components:
-  schemas: {}
+  schemas:
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          description: "Adresse email de l'utilisateur"
+          example: "utilisateur@exemple.com"
+        password:
+          type: string
+          description: "Mot de passe de l'utilisateur"
+          example: "motdepasse123"
+    
+    LoginResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: "Message de réponse"
+          example: "Connexion réussie"
+        token:
+          type: string
+          description: "Token JWT pour l'authentification"
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        user:
+          $ref: "#/components/schemas/UserDTO"
+    
+    RegisterRequest:
+      type: object
+      required:
+        - username
+        - email
+        - password
+      properties:
+        username:
+          type: string
+          description: "Nom d'utilisateur"
+          example: "johndoe"
+        email:
+          type: string
+          description: "Adresse email"
+          example: "john.doe@exemple.com"
+        password:
+          type: string
+          description: "Mot de passe (min. 8 caractères)"
+          example: "password123"
+    
+    RegisterResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: "Message de réponse"
+          example: "Utilisateur enregistré avec succès"
+        user:
+          $ref: "#/components/schemas/UserDTO"
+    
+    UserDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: "ID unique de l'utilisateur"
+          example: 1
+        username:
+          type: string
+          description: "Nom d'utilisateur"
+          example: "johndoe"
+        email:
+          type: string
+          description: "Adresse email"
+          example: "john.doe@exemple.com"
+        password:
+          type: string
+          description: "Mot de passe hashé (non visible dans les réponses normales)"
+          example: "$2a$10$..."
+        status:
+          type: boolean
+          description: "Statut du compte (actif ou inactif)"
+          example: true
+        createdAt:
+          type: string
+          description: "Date de création du compte (format ISO)"
+          example: "2024-03-14T14:30:00Z"
+        updatedAt:
+          type: string
+          description: "Date de dernière mise à jour (format ISO)"
+          example: "2024-03-14T14:30:00Z"
+    
+    SearchByEmail:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          description: "Adresse email à rechercher"
+          example: "user@example.com"
+    
+    SearchByUsername:
+      type: object
+      required:
+        - username
+      properties:
+        username:
+          type: string
+          description: "Nom d'utilisateur à rechercher"
+          example: "johndoe"
+    
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: "Message d'erreur"
+          example: "Une erreur est survenue"
+        code:
+          type: integer
+          description: "Code d'erreur HTTP"
+          example: 400
