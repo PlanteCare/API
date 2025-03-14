@@ -1,0 +1,19 @@
+ktor:
+  application:
+    modules:
+      - com.api.ApplicationKt.module
+  deployment:
+    port: 8080
+  development: false
+
+database:
+  url: "jdbc:mysql://localhost:3306/plantecare"
+  user: "planteadmin"
+  password: "asgdasdgkjfbQWRIWFHWEGBSKV JZK VASDLI"
+  driver: "com.mysql.cj.jdbc.Driver"
+
+jwt:
+  audience: "plantecare-api"
+  issuer: "votre-domaine.com"
+  realm: "Plante Care API"
+  secret: "votre_secret_jwt_tres_securise"

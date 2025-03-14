@@ -13,6 +13,7 @@ fun Application.configureHTTP() {
     }
     install(CORS) {
         allowMethod(HttpMethod.Options)
+        allowMethod(HttpMethod.Post)
         allowMethod(HttpMethod.Put)
         allowMethod(HttpMethod.Delete)
         allowMethod(HttpMethod.Patch)
