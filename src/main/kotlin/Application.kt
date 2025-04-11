@@ -8,6 +8,8 @@ import com.api.repositories.UserRepository
 import com.api.routing.configureRouting
 import com.api.services.JwtService
 import com.api.services.UserService
+import com.api.repositories.PotRepository
+import com.api.services.PotService
 import io.ktor.server.application.*
 
 fun main(args: Array<String>) {
@@ -16,11 +18,13 @@ fun main(args: Array<String>) {
 
 fun Application.module() {
     val userRepository = UserRepository()
+    val potRepository = PotRepository()
     val userService = UserService(userRepository)
+    val potService = PotService(potRepository)
     val jwtService = JwtService(this, userService)
     configureSerialization()
     configureDatabases()
     configureHTTP()
     configureSecurity(jwtService)
-    configureRouting(userService, jwtService)
+    configureRouting(userService, jwtService, potService)
 }

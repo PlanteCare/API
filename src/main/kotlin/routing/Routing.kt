@@ -1,6 +1,7 @@
 package com.api.routing
 
 import com.api.services.JwtService
+import com.api.services.PotService
 import com.api.services.UserService
 import io.ktor.server.application.*
 import io.ktor.server.response.*
@@ -9,7 +10,8 @@ import org.slf4j.LoggerFactory
 
 fun Application.configureRouting(
     userService: UserService,
-    jwtService: JwtService
+    jwtService: JwtService,
+    potService: PotService
 ) {
     val logger = LoggerFactory.getLogger(this::class.java)
     routing {
@@ -19,6 +21,10 @@ fun Application.configureRouting(
 
         route("/api/user") {
             userRoute(userService)
+        }
+
+        route("/api/pot") {
+            potRoute(potService)
         }
 
         route("/api/auth") {

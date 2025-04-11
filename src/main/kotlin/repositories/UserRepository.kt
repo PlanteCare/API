@@ -4,8 +4,6 @@ import com.api.database.dbQuery
 import com.api.models.DAOs.User
 import com.api.models.DTOs.UserDTO
 import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 

@@ -5,6 +5,8 @@ import com.api.routing.requests.LoginRequest
 import com.api.routing.responses.LoginResponse
 import com.api.services.JwtService
 import com.api.services.UserService
+import com.api.utils.isValidEmail
+import com.api.utils.verifyPassword
 import io.ktor.http.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -28,6 +30,30 @@ fun Route.authRoute(
                 )
                 return@post
             }
+            if (!isValidEmail(loginRequest.email)) {
+                call.respond(
+                    HttpStatusCode.BadRequest,
+                    ErrorResponse(message = "Format d'email invalide", code = 400)
+                )
+                return@post
+            }
+
+            val existingUser = userService.getUserByEmail(loginRequest.email)
+            if (existingUser == null) {
+                call.respond(
+                    HttpStatusCode.NotFound,
+                    ErrorResponse(message = "Utilisateur non trouvé", code = 404)
+                )
+                return@post
+            }
+
+            if (!verifyPassword(loginRequest.password, existingUser.password)) {
+                call.respond(
+                    HttpStatusCode.Unauthorized,
+                    ErrorResponse(message = "Mot de passe incorrect", code = 401)
+                )
+                return@post
+            }
 
             val token = jwtService.createJwtToken(loginRequest)
             if (token != null) {
@@ -35,6 +61,8 @@ fun Route.authRoute(
                     HttpStatusCode.OK,
                     LoginResponse(
                         message = "Connexion réussie",
+                        username = existingUser.username,
+                        role = existingUser.roleId,
                         token = token,
                     )
                 )

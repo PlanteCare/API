@@ -29,12 +29,14 @@ class JwtService(
         val existingUser = runBlocking { userService.getUserByEmail(loginRequest.email) }
 
         return if (existingUser != null && verifyPassword(loginRequest.password, existingUser.password)) {
+
             JWT
                 .create()
                 .withAudience(audience)
                 .withIssuer(issuer)
                 .withClaim("email", existingUser.email)
-                .withClaim("role", existingUser.roleId)
+                .withClaim("userId", existingUser.id)
+                .withClaim("roleId", existingUser.roleId)
                 .withExpiresAt(Date(System.currentTimeMillis() + 3_600_000))
                 .sign(Algorithm.HMAC256(secret))
         } else null
@@ -51,17 +53,12 @@ class JwtService(
         }
     }
 
-    // Correction du nom de fonction (faute de frappe)
     private fun audienceMatches(credential: JWTCredential): Boolean =
         credential.payload.audience.contains(audience)
 
     private fun extractEmail(credential: JWTCredential): String? =
         credential.payload.getClaim("email").asString()
 
-    private fun extractRole(credential: JWTCredential): String? =
-        credential.payload.getClaim("role").asString()
-
-    // Correction du nom de fonction (faute de frappe)
     private fun getConfigProperty(path: String): String =
         application.environment.config.property(path).getString()
 }

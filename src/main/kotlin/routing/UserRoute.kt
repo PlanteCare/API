@@ -1,7 +1,6 @@
 package com.api.routing
 
 import com.api.exception.ErrorResponse
-import com.api.models.DTOs.UserDTO
 import com.api.routing.requests.RegisterRequest
 import com.api.routing.requests.SearchByEmail
 import com.api.routing.requests.SearchByUsername
