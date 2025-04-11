@@ -1,17 +1,16 @@
 package com.api.models.DAOs
 
+import com.api.models.DAOs.Role.default
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.datetime
+import org.jetbrains.exposed.sql.javatime.timestamp
 import java.time.LocalDateTime
 
-object User : Table() {
+object Pot : Table() {
     val id = integer("id").autoIncrement()
-    val brokerId = integer("broker_id").references(Broker.id).default(1)
-    val roleId = integer("role_id").references(Role.id).default(1)
-    val username = varchar("username", 50).uniqueIndex()
-    val email = varchar("email", 255).uniqueIndex()
-    val password = varchar("password", 125)
-    val status = bool("status").default(true)
+    val userId = integer("user_id").references(User.id)
+    val macAddress = varchar("mac_address", 255)
+    val name = varchar("name", 50)
     val createdAt = datetime("created_at").default(LocalDateTime.now())
     val updatedAt = datetime("updated_at").default(LocalDateTime.now())
 

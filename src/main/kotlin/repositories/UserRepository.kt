@@ -13,6 +13,8 @@ class UserRepository {
 
     private fun resultRowToUser(row: ResultRow) = UserDTO(
         id = row[User.id],
+        brokerId = row[User.brokerId],
+        roleId = row[User.roleId],
         username = row[User.username],
         email = row[User.email],
         status = row[User.status],

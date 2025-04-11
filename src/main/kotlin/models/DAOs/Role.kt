@@ -4,14 +4,9 @@ import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.datetime
 import java.time.LocalDateTime
 
-object User : Table() {
+object Role : Table() {
     val id = integer("id").autoIncrement()
-    val brokerId = integer("broker_id").references(Broker.id).default(1)
-    val roleId = integer("role_id").references(Role.id).default(1)
-    val username = varchar("username", 50).uniqueIndex()
-    val email = varchar("email", 255).uniqueIndex()
-    val password = varchar("password", 125)
-    val status = bool("status").default(true)
+    val description = varchar("description", 50)
     val createdAt = datetime("created_at").default(LocalDateTime.now())
     val updatedAt = datetime("updated_at").default(LocalDateTime.now())
 

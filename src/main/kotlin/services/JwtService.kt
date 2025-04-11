@@ -34,6 +34,7 @@ class JwtService(
                 .withAudience(audience)
                 .withIssuer(issuer)
                 .withClaim("email", existingUser.email)
+                .withClaim("role", existingUser.roleId)
                 .withExpiresAt(Date(System.currentTimeMillis() + 3_600_000))
                 .sign(Algorithm.HMAC256(secret))
         } else null
@@ -56,6 +57,9 @@ class JwtService(
 
     private fun extractEmail(credential: JWTCredential): String? =
         credential.payload.getClaim("email").asString()
+
+    private fun extractRole(credential: JWTCredential): String? =
+        credential.payload.getClaim("role").asString()
 
     // Correction du nom de fonction (faute de frappe)
     private fun getConfigProperty(path: String): String =
